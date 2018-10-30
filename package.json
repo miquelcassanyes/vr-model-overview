@@ -1,0 +1,29 @@
+{
+  "name": "vr-model-overview",
+  "version": "1.0.0",
+  "description": "Model Overview PoC in Virtual Reality",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "build:prod": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miquelcassanyes/vr-model-overview.git"
+  },
+  "author": "Miquel Cassanyes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/miquelcassanyes/vr-model-overview/issues"
+  },
+  "homepage": "https://github.com/miquelcassanyes/vr-model-overview#readme",
+  "dependencies": {
+    "aframe": "^0.8.2",
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
+  }
+}
