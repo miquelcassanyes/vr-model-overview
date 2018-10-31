@@ -1,18 +1,27 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Hello, WebVR! • A-Frame</title>
-    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <title>VR Model Overview</title>
+    <meta name="description" content="VR Model Overview">
+    <link rel="shortcut icon" type="image/png" href="assets/images/VR_Headset-512.png"/>
     <script src="dist/bundle.js"></script>
 </head>
 <body>
-<a-scene background="color: #ECECEC">
+<a-scene>
     <a-assets>
-        <a-asset-item id="MB-G" src="assets/models/mercedes_g.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_g" src="/assets/models/mercedes_g/mercedes_g.gltf"></a-asset-item>
     </a-assets>
-    <a-entity src="#MB-G"></a-entity>
-    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+
+    <a-gltf-model src="#mercedes_g" scale="0.0265 0.0265 0.0265" position="0 0 -7" rotation="0 235 0"></a-gltf-model>
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="20" height="20" color="#7BC8A4" shadow></a-plane>
+    <!--<a-box color="red" width="1" height="1.969" depth="1" position="0 1 -4"></a-box>-->
+    <a-box position="0 0 0" width="20" height="20" depth="20" material="color: grey; side: double;"></a-box>
+    <a-entity id="rig" movement-controls position="0 0 0">
+        <a-entity id="camera"
+                  camera="userHeight: 1.6;"
+                  look-controls></a-entity>
+    </a-entity>
 </a-scene>
 </body>
 </html>
