@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>VR Model Overview</title>
     <meta name="description" content="VR Model Overview">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no,maximum-scale=1">
     <link rel="shortcut icon" type="image/png" href="assets/images/VR_Headset-512.png"/>
     <script src="dist/bundle.js"></script>
 </head>
@@ -19,8 +20,9 @@
     <a-box position="0 0 0" width="20" height="20" depth="20" material="color: grey; side: double;"></a-box>
     <a-entity id="rig" movement-controls position="0 0 0">
         <a-entity id="camera"
-                  camera="userHeight: 1.6;"
-                  look-controls></a-entity>
+                  camera
+                  position="0 1.6 0"
+                  look-controls="pointerLockEnabled: true;"></a-entity>
     </a-entity>
 </a-scene>
 </body>
