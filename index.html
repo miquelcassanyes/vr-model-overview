@@ -23,10 +23,11 @@
         <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
     </a-assets>
 
-    <a-entity id="rig" movement-controls="controls: keyboard, checkpoint, gamepad, touch" checkpoint-controls="mode: animate" position="12 0 -3" rotation="0 90 0">
+    <a-entity id="rig" position="12 0 -3" rotation="0 90 0">
         <a-entity id="camera"
                   camera
                   position="0 1.6 0"
+                  gaze-teleport="curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
                   look-controls="pointerLockEnabled: true;">
             <a-entity cursor
                       position="0 0 -1"
@@ -43,10 +44,8 @@
     <a-gltf-model src="#mercedes_sls_amg" scale="0.033 0.033 0.033" position="-7.3 0 -0.6" rotation="0 220 0"></a-gltf-model>
     <a-gltf-model src="#mercedes_amg_project_one" scale="0.013 0.013 0.013" position="-12 0 2.3" rotation="0 205 0"></a-gltf-model>
     <a-gltf-model src="#mercedes_slr" scale="0.002 0.002 0.002" position="-12.5 0 -9.3" rotation="0 235 0"></a-gltf-model>
-    <a-plane position="0 0 -4" rotation="-90 0 0" width="35" height="20" color="#7BC8A4" shadow></a-plane>
-    <a-box color="red" width="1" height="1.669" depth="1" position="0 1 -4"></a-box>
-    <a-box position="0 0 -4" width="35" height="20" depth="20" material="color: grey; side: double;"></a-box>
-
+    <a-grid shadow static-body></a-grid>
+    <!--<a-box color="red" width="1" height="1.669" depth="1" position="0 1 -4"></a-box>-->
 
     <a-entity position="1 0 1">
         <a-cylinder checkpoint radius="1" height="0.1" position="1.5 0 -4.7" color="#39BB82"></a-cylinder>
