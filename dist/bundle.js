@@ -98,6 +98,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var aframe_teleport_controls__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(aframe_teleport_controls__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _components_test__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(52);
 /* harmony import */ var _components_gaze_teleport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(53);
+/* harmony import */ var _components_mouse_teleport__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(54);
+/* harmony import */ var _components_universal_teleport__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(55);
+
+
 
 
 
@@ -88610,7 +88614,7 @@ var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
         button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
         startEvents: {type: 'array', default: ['start-teleport']},
         endEvents: {type: 'array', default: ['end-teleport']},
-        collisionEntities: {default: ''},
+        collisionEntities: {type: 'string', default: ''},
         hitEntity: {type: 'string'},
         cameraRig: {type: 'string'},
         teleportOrigin: {type: 'string'},
@@ -88625,7 +88629,7 @@ var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
         curveShootingSpeed: {type: 'number', default: 5, min: 0, if: {type: ['parabolic']}},
         defaultPlaneSize: {type: 'number', default: 100 },
         landingNormal: {type: 'vec3', default: { x: 0, y: 1, z: 0 }},
-        landingMaxAngle: {type: 'number', default: '45', min: 0, max: 360}
+        landingMaxAngle: {default: '45', min: 0, max: 360}
     },
 
     init: function () {
@@ -88663,6 +88667,116 @@ var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
         canvas.removeEventListener('touchend', this.startTeleport);
         canvas.removeEventListener('touchend', this.endTeleport);
         this.el.removeAttribute('teleport-controls');
+    }
+});
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mouseTeleport", function() { return mouseTeleport; });
+var mouseTeleport = AFRAME.registerComponent('mouse-teleport', {
+    schema: {
+        type: {default: 'parabolic', oneOf: ['parabolic', 'line']},
+        button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
+        startEvents: {type: 'array', default: ['start-teleport']},
+        endEvents: {type: 'array', default: ['end-teleport']},
+        collisionEntities: {type: 'string', default: ''},
+        hitEntity: {type: 'string'},
+        cameraRig: {type: 'string'},
+        teleportOrigin: {type: 'string'},
+        hitCylinderColor: {type: 'color', default: '#99ff99'},
+        hitCylinderRadius: {default: 0.25, min: 0},
+        hitCylinderHeight: {default: 0.3, min: 0},
+        maxLength: {type: 'number', default: 10, min: 0, if: {type: ['line']}},
+        curveNumberPoints: {type: 'int', default: 30, min: 2, if: {type: ['parabolic']}},
+        curveLineWidth: {type: 'number', default: 0.025},
+        curveHitColor: {type: 'color', default: '#99ff99'},
+        curveMissColor: {type: 'color', default: '#ff0000'},
+        curveShootingSpeed: {type: 'number', default: 5, min: 0, if: {type: ['parabolic']}},
+        defaultPlaneSize: {type: 'number', default: 100 },
+        landingNormal: {type: 'vec3', default: { x: 0, y: 1, z: 0 }},
+        landingMaxAngle: {default: '45', min: 0, max: 360}
+    },
+
+    init: function () {
+        this.el.setAttribute('teleport-controls', this.data);
+        this.startTeleport = this.startTeleport.bind(this);
+        this.endTeleport = this.endTeleport.bind(this);
+        this.el.sceneEl.canvas.addEventListener('mouseup', this.startTeleport);
+    },
+
+    startTeleport: function () {
+        const el = this.el,
+            canvas = el.sceneEl.canvas;
+
+        canvas.removeEventListener('mouseup', this.startTeleport);
+        canvas.addEventListener('mouseup', this.endTeleport);
+        this.data.startEvents.forEach(function (startEvent) {
+            el.emit(startEvent);
+        })
+    },
+
+    endTeleport: function () {
+        const el = this.el,
+            canvas = el.sceneEl.canvas;
+
+        canvas.removeEventListener('mouseup', this.endTeleport);
+        canvas.addEventListener('mouseup', this.startTeleport);
+        this.data.endEvents.forEach(function (endEvent) {
+            el.emit(endEvent);
+        })
+    },
+
+    remove: function () {
+        const canvas = this.el.sceneEl.canvas;
+
+        canvas.removeEventListener('mouseup', this.startTeleport);
+        canvas.removeEventListener('mouseup', this.endTeleport);
+        this.el.removeAttribute('teleport-controls');
+    }
+});
+
+/***/ }),
+/* 55 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "universalTeleport", function() { return universalTeleport; });
+var universalTeleport = AFRAME.registerComponent('universal-teleport', {
+    schema: {
+        type: {default: 'parabolic', oneOf: ['parabolic', 'line']},
+        button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
+        startEvents: {type: 'array', default: ['start-teleport']},
+        endEvents: {type: 'array', default: ['end-teleport']},
+        collisionEntities: {type: 'string', default: ''},
+        hitEntity: {type: 'string'},
+        cameraRig: {type: 'string'},
+        teleportOrigin: {type: 'string'},
+        hitCylinderColor: {type: 'color', default: '#99ff99'},
+        hitCylinderRadius: {default: 0.25, min: 0},
+        hitCylinderHeight: {default: 0.3, min: 0},
+        maxLength: {type: 'number', default: 10, min: 0, if: {type: ['line']}},
+        curveNumberPoints: {type: 'int', default: 30, min: 2, if: {type: ['parabolic']}},
+        curveLineWidth: {type: 'number', default: 0.025},
+        curveHitColor: {type: 'color', default: '#99ff99'},
+        curveMissColor: {type: 'color', default: '#ff0000'},
+        curveShootingSpeed: {type: 'number', default: 5, min: 0, if: {type: ['parabolic']}},
+        defaultPlaneSize: {type: 'number', default: 100 },
+        landingNormal: {type: 'vec3', default: { x: 0, y: 1, z: 0 }},
+        landingMaxAngle: {default: '45', min: 0, max: 360}
+    },
+
+    init: function () {
+        this.el.setAttribute('mouse-teleport', this.data);
+        this.el.setAttribute('gaze-teleport', this.data);
+    },
+
+    remove: function () {
+        this.el.removeAttribute('mouse-teleport gaze-teleport teleport-controls');
     }
 });
 

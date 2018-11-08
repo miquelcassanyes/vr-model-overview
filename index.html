@@ -27,7 +27,7 @@
         <a-entity id="camera"
                   camera
                   position="0 1.6 0"
-                  gaze-teleport="curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
+                  universal-teleport="curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
                   look-controls="pointerLockEnabled: true;">
             <a-entity cursor
                       position="0 0 -1"
@@ -46,14 +46,6 @@
     <a-gltf-model src="#mercedes_slr" scale="0.002 0.002 0.002" position="-12.5 0 -9.3" rotation="0 235 0"></a-gltf-model>
     <a-grid shadow></a-grid>
     <!--<a-box color="red" width="1" height="1.669" depth="1" position="0 1 -4"></a-box>-->
-
-    <a-entity position="1 0 1">
-        <a-cylinder checkpoint radius="1" height="0.1" position="1.5 0 -4.7" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="-0.5 0 -12" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="-5.5 0 -4" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="0 0 0" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="-5 0 -12" color="#39BB82"></a-cylinder>
-    </a-entity>
 </a-scene>
 </body>
 </html>

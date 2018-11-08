@@ -1,4 +1,4 @@
-export var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
+export var mouseTeleport = AFRAME.registerComponent('mouse-teleport', {
     schema: {
         type: {default: 'parabolic', oneOf: ['parabolic', 'line']},
         button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
@@ -26,15 +26,15 @@ export var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
         this.el.setAttribute('teleport-controls', this.data);
         this.startTeleport = this.startTeleport.bind(this);
         this.endTeleport = this.endTeleport.bind(this);
-        this.el.sceneEl.canvas.addEventListener('touchend', this.startTeleport);
+        this.el.sceneEl.canvas.addEventListener('mouseup', this.startTeleport);
     },
 
     startTeleport: function () {
         const el = this.el,
-              canvas = el.sceneEl.canvas;
+            canvas = el.sceneEl.canvas;
 
-        canvas.removeEventListener('touchend', this.startTeleport);
-        canvas.addEventListener('touchend', this.endTeleport);
+        canvas.removeEventListener('mouseup', this.startTeleport);
+        canvas.addEventListener('mouseup', this.endTeleport);
         this.data.startEvents.forEach(function (startEvent) {
             el.emit(startEvent);
         })
@@ -44,8 +44,8 @@ export var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
         const el = this.el,
             canvas = el.sceneEl.canvas;
 
-        canvas.removeEventListener('touchend', this.endTeleport);
-        canvas.addEventListener('touchend', this.startTeleport);
+        canvas.removeEventListener('mouseup', this.endTeleport);
+        canvas.addEventListener('mouseup', this.startTeleport);
         this.data.endEvents.forEach(function (endEvent) {
             el.emit(endEvent);
         })
@@ -54,8 +54,8 @@ export var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
     remove: function () {
         const canvas = this.el.sceneEl.canvas;
 
-        canvas.removeEventListener('touchend', this.startTeleport);
-        canvas.removeEventListener('touchend', this.endTeleport);
+        canvas.removeEventListener('mouseup', this.startTeleport);
+        canvas.removeEventListener('mouseup', this.endTeleport);
         this.el.removeAttribute('teleport-controls');
     }
 });
