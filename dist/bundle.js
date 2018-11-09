@@ -98,11 +98,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var aframe_teleport_controls__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(aframe_teleport_controls__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var aframe_environment_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(52);
 /* harmony import */ var aframe_environment_component__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(aframe_environment_component__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _components_gaze_teleport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(53);
-/* harmony import */ var _components_mouse_teleport__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(54);
-/* harmony import */ var _components_universal_teleport__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(55);
-
-
+/* harmony import */ var _components_extended_teleport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(53);
 
 
 
@@ -89905,9 +89901,10 @@ PerlinNoise.prototype.noise = function(x, y, z) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gazeTeleport", function() { return gazeTeleport; });
-var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extendedTeleport", function() { return extendedTeleport; });
+var extendedTeleport = AFRAME.registerComponent('extended-teleport', {
     schema: {
+        controls: {type: 'array', default: ['gaze', 'mouse', 'gamepad']},
         type: {default: 'parabolic', oneOf: ['parabolic', 'line']},
         button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
         startEvents: {type: 'array', default: ['start-teleport']},
@@ -89931,32 +89928,62 @@ var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
     },
 
     init: function () {
-        this.el.setAttribute('teleport-controls', this.data);
+        const el = this.el,
+              sceneEl = el.sceneEl,
+              data = this.data;
+
+        this.controls = data.controls;
+        delete data.controls;
+        el.setAttribute('teleport-controls', this.data);
         this.startTeleport = this.startTeleport.bind(this);
         this.endTeleport = this.endTeleport.bind(this);
-        this.el.sceneEl.canvas.addEventListener('touchend', this.startTeleport);
+
+        if (this.controls.includes('gaze')) {
+            sceneEl.canvas.addEventListener('touchend', this.startTeleport);
+        }
+
+        if (this.controls.includes('mouse')) {
+            sceneEl.canvas.addEventListener('mouseup', this.startTeleport);
+        }
+
+        if (this.controls.includes('gamepad')) {
+            this.gamepads = navigator.getGamepads();
+            this.active = false;
+            this.keyPressed = false;
+        }
     },
 
-    startTeleport: function () {
-        const el = this.el,
-              canvas = el.sceneEl.canvas;
+    tick: function () {
+        const el = this.el;
 
-        canvas.removeEventListener('touchend', this.startTeleport);
-        canvas.addEventListener('touchend', this.endTeleport);
-        this.data.startEvents.forEach(function (startEvent) {
-            el.emit(startEvent);
-        })
-    },
+        if (!this.controls.includes('gamepad')) {
+            return;
+        }
 
-    endTeleport: function () {
-        const el = this.el,
-            canvas = el.sceneEl.canvas;
+        for (var i=0; i<this.gamepads.length; i++) {
+            var gamepad = this.gamepads[i];
 
-        canvas.removeEventListener('touchend', this.endTeleport);
-        canvas.addEventListener('touchend', this.startTeleport);
-        this.data.endEvents.forEach(function (endEvent) {
-            el.emit(endEvent);
-        })
+            if (gamepad !== null) {
+                if (gamepad !== null) {
+                    if (!this.active) {
+                        if (!this.keyPressed && gamepad.buttons[0].pressed) {
+                            this.keyPressed = true;
+                        }
+                        else if (this.keyPressed && !gamepad.buttons[0].pressed) {
+                            this.startTeleport();
+                        }
+                    }
+                    else {
+                        if (!this.keyPressed && gamepad.buttons[0].pressed) {
+                            this.keyPressed = true;
+                        }
+                        else if (this.keyPressed && !gamepad.buttons[0].pressed) {
+                            this.endTeleport();
+                        }
+                    }
+                }
+            }
+        }
     },
 
     remove: function () {
@@ -89964,117 +89991,58 @@ var gazeTeleport = AFRAME.registerComponent('gaze-teleport', {
 
         canvas.removeEventListener('touchend', this.startTeleport);
         canvas.removeEventListener('touchend', this.endTeleport);
+        canvas.removeEventListener('mouseup', this.startTeleport);
+        canvas.removeEventListener('mouseup', this.endTeleport);
         this.el.removeAttribute('teleport-controls');
-    }
-});
-
-/***/ }),
-/* 54 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mouseTeleport", function() { return mouseTeleport; });
-var mouseTeleport = AFRAME.registerComponent('mouse-teleport', {
-    schema: {
-        type: {default: 'parabolic', oneOf: ['parabolic', 'line']},
-        button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
-        startEvents: {type: 'array', default: ['start-teleport']},
-        endEvents: {type: 'array', default: ['end-teleport']},
-        collisionEntities: {type: 'selector', default: ''},
-        hitEntity: {type: 'string'},
-        cameraRig: {type: 'string'},
-        teleportOrigin: {type: 'string'},
-        hitCylinderColor: {type: 'color', default: '#99ff99'},
-        hitCylinderRadius: {default: 0.25, min: 0},
-        hitCylinderHeight: {default: 0.3, min: 0},
-        maxLength: {type: 'number', default: 10, min: 0, if: {type: ['line']}},
-        curveNumberPoints: {type: 'int', default: 30, min: 2, if: {type: ['parabolic']}},
-        curveLineWidth: {type: 'number', default: 0.025},
-        curveHitColor: {type: 'color', default: '#99ff99'},
-        curveMissColor: {type: 'color', default: '#ff0000'},
-        curveShootingSpeed: {type: 'number', default: 5, min: 0, if: {type: ['parabolic']}},
-        defaultPlaneSize: {type: 'number', default: 100 },
-        landingNormal: {type: 'vec3', default: { x: 0, y: 1, z: 0 }},
-        landingMaxAngle: {default: '45', min: 0, max: 360}
-    },
-
-    init: function () {
-        this.el.setAttribute('teleport-controls', this.data);
-        this.startTeleport = this.startTeleport.bind(this);
-        this.endTeleport = this.endTeleport.bind(this);
-        this.el.sceneEl.canvas.addEventListener('mouseup', this.startTeleport);
     },
 
     startTeleport: function () {
         const el = this.el,
-            canvas = el.sceneEl.canvas;
+              canvas = el.sceneEl.canvas,
+              controls = this.controls;
 
-        canvas.removeEventListener('mouseup', this.startTeleport);
-        canvas.addEventListener('mouseup', this.endTeleport);
+        if (controls.includes('gaze')) {
+            canvas.removeEventListener('touchend', this.startTeleport);
+            canvas.addEventListener('touchend', this.endTeleport);
+        }
+
+        if (controls.includes('mouse')) {
+            canvas.removeEventListener('mouseup', this.startTeleport);
+            canvas.addEventListener('mouseup', this.endTeleport);
+        }
+
+        if (controls.includes('gamepad')) {
+            this.active = true;
+            this.keyPressed = false;
+        }
         this.data.startEvents.forEach(function (startEvent) {
             el.emit(startEvent);
-        })
+        });
     },
 
     endTeleport: function () {
         const el = this.el,
-            canvas = el.sceneEl.canvas;
+              canvas = el.sceneEl.canvas,
+              controls = this.controls;
 
-        canvas.removeEventListener('mouseup', this.endTeleport);
-        canvas.addEventListener('mouseup', this.startTeleport);
+        if (controls.includes('gaze')) {
+            canvas.removeEventListener('touchend', this.endTeleport);
+            canvas.addEventListener('touchend', this.startTeleport);
+        }
+
+        if (controls.includes('mouse')) {
+            canvas.removeEventListener('mouseup', this.endTeleport);
+            canvas.addEventListener('mouseup', this.startTeleport);
+        }
+
+        if (controls.includes('gamepad')) {
+            this.active = false;
+            this.keyPressed = false;
+        }
+
         this.data.endEvents.forEach(function (endEvent) {
             el.emit(endEvent);
-        })
-    },
-
-    remove: function () {
-        const canvas = this.el.sceneEl.canvas;
-
-        canvas.removeEventListener('mouseup', this.startTeleport);
-        canvas.removeEventListener('mouseup', this.endTeleport);
-        this.el.removeAttribute('teleport-controls');
-    }
-});
-
-/***/ }),
-/* 55 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "universalTeleport", function() { return universalTeleport; });
-var universalTeleport = AFRAME.registerComponent('universal-teleport', {
-    schema: {
-        type: {default: 'parabolic', oneOf: ['parabolic', 'line']},
-        button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
-        startEvents: {type: 'array', default: ['start-teleport']},
-        endEvents: {type: 'array', default: ['end-teleport']},
-        collisionEntities: {type: 'string', default: ''},
-        hitEntity: {type: 'string'},
-        cameraRig: {type: 'string'},
-        teleportOrigin: {type: 'string'},
-        hitCylinderColor: {type: 'color', default: '#99ff99'},
-        hitCylinderRadius: {default: 0.25, min: 0},
-        hitCylinderHeight: {default: 0.3, min: 0},
-        maxLength: {type: 'number', default: 10, min: 0, if: {type: ['line']}},
-        curveNumberPoints: {type: 'int', default: 30, min: 2, if: {type: ['parabolic']}},
-        curveLineWidth: {type: 'number', default: 0.025},
-        curveHitColor: {type: 'color', default: '#99ff99'},
-        curveMissColor: {type: 'color', default: '#ff0000'},
-        curveShootingSpeed: {type: 'number', default: 5, min: 0, if: {type: ['parabolic']}},
-        defaultPlaneSize: {type: 'number', default: 100 },
-        landingNormal: {type: 'vec3', default: { x: 0, y: 1, z: 0 }},
-        landingMaxAngle: {default: '45', min: 0, max: 360}
-    },
-
-    init: function () {
-        this.el.setAttribute('mouse-teleport', this.data);
-        this.el.setAttribute('gaze-teleport', this.data);
-    },
-
-    remove: function () {
-        this.el.removeAttribute('mouse-teleport gaze-teleport teleport-controls');
+        });
     }
 });
 
