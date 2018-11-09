@@ -12,14 +12,21 @@
 <a-scene>
     <a-assets>
         <a-asset-item id="mercedes_g" src="assets/models/mercedes_g/mercedes_g.gltf"></a-asset-item>
-        <a-mixin id="checkpoint"></a-mixin>
-        <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
+        <a-asset-item id="mercedes_glk" src="assets/models/mercedes_glk/scene.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_sls" src="assets/models/mercedes_sls/scene.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_e" src="assets/models/mercedes_e/scene.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_c" src="assets/models/mercedes_c/scene.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_sls_amg" src="assets/models/mercedes_sls_amg/scene.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_amg_project_one" src="assets/models/mercedes_amg_project_one/scene.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_slr" src="assets/models/mercedes_slr/scene.gltf"></a-asset-item>
+        <img id="asphalt" src="assets/images/asphalt.jpeg"></img>
     </a-assets>
 
-    <a-entity id="rig" movement-controls="controls: keyboard, checkpoint, gamepad, touch" checkpoint-controls="mode: animate" position="0 0 0">
+    <a-entity id="rig" position="15 0 -3" rotation="0 90 0">
         <a-entity id="camera"
                   camera
                   position="0 1.6 0"
+                  extended-teleport="curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
                   look-controls="pointerLockEnabled: true;">
             <a-entity cursor
                       position="0 0 -1"
@@ -28,19 +35,18 @@
         </a-entity>
     </a-entity>
 
-    <a-gltf-model src="#mercedes_g" scale="0.0265 0.0265 0.0265" position="0 0 -7" rotation="0 235 0"></a-gltf-model>
-    <a-plane position="0 0 -4" rotation="-90 0 0" width="20" height="20" color="#7BC8A4" shadow></a-plane>
-    <!--<a-box color="red" width="1" height="1.969" depth="1" position="0 1 -4"></a-box>-->
-    <a-box position="0 0 -4" width="20" height="20" depth="20" material="color: grey; side: double;"></a-box>
+    <a-gltf-model src="#mercedes_g" scale="0.0265 0.0265 0.0265" position="3 0 -10" rotation="0 235 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_glk" scale="0.025 0.025 0.025" position="7 0 -6.8" rotation="0 330 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_sls" scale="0.0265 0.0265 0.0265" position="-6.5 0 -7" rotation="0 330 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_e" scale="0.03 0.03 0.03" position="1.7 0 0.5" rotation="0 295 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_c" scale="0.028 0.028 0.028" position="7 0 0.5" rotation="0 290 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_sls_amg" scale="0.033 0.033 0.033" position="-4.3 0 -0.6" rotation="0 220 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_amg_project_one" scale="0.013 0.013 0.013" position="-9 0 2.3" rotation="0 205 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_slr" scale="0.002 0.002 0.002" position="-9.5 0 -9.3" rotation="0 235 0" shadow></a-gltf-model>
 
-
-    <a-entity position="1 0 1">
-        <a-cylinder checkpoint radius="1" height="0.1" position="1.5 0 -4.7" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="-0.5 0 -12" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="-5.5 0 -4" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="0 0 0" color="#39BB82"></a-cylinder>
-        <a-cylinder checkpoint radius="1" height="0.1" position="-5 0 -12" color="#39BB82"></a-cylinder>
-    </a-entity>
+    <a-entity environment="preset: yavapai; shadow: true; playArea: 1.1; skyColor: #286978; groundYScale: 20"></a-entity>
+    <a-box material="src: #asphalt; repeat: 75 6" shadow width="75" height="0.1" depth="6" position="0 0.05 -3" shadow></a-box>
+    <!--<a-box color="red" width="1" height="1.669" depth="1" position="0 1 -4"></a-box>-->
 </a-scene>
 </body>
 </html>
