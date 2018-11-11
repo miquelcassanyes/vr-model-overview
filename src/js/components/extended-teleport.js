@@ -5,7 +5,7 @@ export var extendedTeleport = AFRAME.registerComponent('extended-teleport', {
         button: {default: 'trackpad', oneOf: ['trackpad', 'trigger', 'grip', 'menu']},
         startEvents: {type: 'array', default: ['start-teleport']},
         endEvents: {type: 'array', default: ['end-teleport']},
-        collisionEntities: {type: 'selector', default: ''},
+        collisionEntities: {type: 'string', default: ''},
         hitEntity: {type: 'string'},
         cameraRig: {type: 'string'},
         teleportOrigin: {type: 'string'},

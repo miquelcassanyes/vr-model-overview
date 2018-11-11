@@ -26,7 +26,7 @@
         <a-entity id="camera"
                   camera
                   position="0 1.6 0"
-                  extended-teleport="curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
+                  extended-teleport="collisionEntities: #road, #redBlock; curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
                   look-controls="pointerLockEnabled: true;">
             <a-entity cursor
                       position="0 0 -1"
@@ -45,8 +45,8 @@
     <a-gltf-model src="#mercedes_slr" scale="0.002 0.002 0.002" position="-9.5 0 -9.3" rotation="0 235 0" shadow></a-gltf-model>
 
     <a-entity environment="preset: yavapai; shadow: true; playArea: 1.1; skyColor: #286978; groundYScale: 20"></a-entity>
-    <a-box material="src: #asphalt; repeat: 75 6" shadow width="75" height="0.1" depth="6" position="0 0.05 -3" shadow></a-box>
-    <!--<a-box color="red" width="1" height="1.669" depth="1" position="0 1 -4"></a-box>-->
+    <a-box id="road" material="src: #asphalt; repeat: 75 6" shadow width="75" height="0.1" depth="6" position="0 0.05 -3" shadow></a-box>
+    <a-box id="redBlock" material="visible: false" width="40" height="0.2" depth="30" position="0 0 0"></a-box>
 </a-scene>
 </body>
 </html>
