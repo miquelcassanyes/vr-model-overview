@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Mercedes G</title>
-    <meta name="description" content="Mercedes G">
+    <title>Mercedes-AMG Project One</title>
+    <meta name="description" content="Mercedes-AMG Project One">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no,maximum-scale=1">
     <link rel="shortcut icon" type="image/png" href="../assets/images/VR_Headset-512.png"/>
     <script src="../dist/bundle.js"></script>
@@ -15,7 +15,7 @@
         <img id="asphalt" src="../assets/images/asphalt.jpeg"></img>
     </a-assets>
 
-    <a-entity id="rig" position="15 0 -3" rotation="0 90 0">
+    <a-entity id="rig" position="-4 0 1" rotation="0 -45 0">
         <a-entity id="camera"
                   camera
                   position="0 1.6 0"
@@ -28,7 +28,7 @@
         </a-entity>
     </a-entity>
 
-    <a-gltf-model src="#mercedes_amg_project_one" scale="0.013 0.013 0.013" position="-9 0 2.3" rotation="0 205 0" shadow></a-gltf-model>
+    <a-gltf-model src="#mercedes_amg_project_one" scale="0.013 0.013 0.013" position="0 0 -2.5" rotation="0 275 0" shadow></a-gltf-model>
 
     <a-entity environment="preset: yavapai; shadow: true; playArea: 1.1; skyColor: #286978; groundYScale: 20"></a-entity>
     <a-box id="road" material="src: #asphalt; repeat: 75 6" shadow width="75" height="0.1" depth="6" position="0 0.05 -3" shadow></a-box>
