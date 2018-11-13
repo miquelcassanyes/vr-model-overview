@@ -31,6 +31,14 @@
                       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03;"
                       material="color: #CCC; shader: flat;"></a-entity>
         </a-entity>
+        <a-entity orbit-menu="disableOn: start-teleport; enableOn: end-teleport"
+                  geometry="primitive: sphere; radius: 1"
+                  position="0 1.6 0"
+                  material="color: #66ff66; opacity: 0.4; side: both; shader: flat">
+            <a-entity id="menu" visible="false">
+                <a-text value="Menu"color="black" position="0 -1.2 -0.7" align="center" rotation="-50 0 0"></a-text>
+            </a-entity>
+        </a-entity>
     </a-entity>
 
     <a-box id="playArea" color="#cc9966" width="8" height="0.1" depth="11" position="0 -0.05 0"></a-box>
