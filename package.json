@@ -22,8 +22,7 @@
     "aframe": "^0.8.2",
     "aframe-environment-component": "^1.1.0",
     "aframe-extras": "^4.2.0",
-    "aframe-teleport-controls": "^0.3.1",
-    "jquery": "^3.3.1"
+    "aframe-teleport-controls": "^0.3.1"
   },
   "devDependencies": {
     "webpack": "^4.23.1",
