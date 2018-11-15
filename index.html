@@ -10,43 +10,57 @@
 </head>
 <body>
 <a-scene>
-    <a-assets>
-        <a-asset-item id="mercedes_g" src="assets/models/mercedes_g/mercedes_g.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_glk" src="assets/models/mercedes_glk/scene.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_sls" src="assets/models/mercedes_sls/scene.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_e" src="assets/models/mercedes_e/scene.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_c" src="assets/models/mercedes_c/scene.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_sls_amg" src="assets/models/mercedes_sls_amg/scene.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_amg_project_one" src="assets/models/mercedes_amg_project_one/scene.gltf"></a-asset-item>
-        <a-asset-item id="mercedes_slr" src="assets/models/mercedes_slr/scene.gltf"></a-asset-item>
-        <img id="asphalt" src="assets/images/asphalt.jpeg"></img>
+    <img>
+        <a-asset-item id="desk" src="assets/models/desk/model.dae"></a-asset-item>
+        <a-asset-item id="computer" src="assets/models/computer/model.dae"></a-asset-item>
+        <a-asset-item id="plant" src="assets/models/plant/model.dae"></a-asset-item>
+        <a-asset-item id="chair" src="assets/models/chair/model.dae"></a-asset-item>
+        <a-asset-item id="carpet" src="assets/models/carpet/model.dae"></a-asset-item>
+        <img id="logo" src="assets/images/MB-logo.png"/>
+        <!--<a-asset-item id="mercedes_amg_project_one" src="../assets/models/mercedes_amg_project_one/scene.gltf"></a-asset-item>-->
+        <a-asset-item id="mercedes_g" src="../assets/models/mercedes_g/mercedes_g.gltf"></a-asset-item>
+        <a-asset-item id="mercedes_slr_mclaren" src="../assets/models/mercedes_slr_mclaren/model.dae"></a-asset-item>
     </a-assets>
 
-    <a-entity id="rig" position="15 0 -3" rotation="0 90 0">
+    <a-entity id="rig" position="-3.5 0 -7.5" rotation="0 180 0">
         <a-entity id="camera"
                   camera
                   position="0 1.6 0"
-                  extended-teleport="collisionEntities: #road, #redBlock; curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
+                  extended-teleport="collisionEntities: #playArea; curveShootingSpeed: 20; cameraRig: #rig; teleportOrigin: [camera]"
                   look-controls="pointerLockEnabled: true;">
             <a-entity cursor
-                      position="0 0 -1"
-                      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03;"
+                      position="0 0 -0.2"
+                      geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.008;"
                       material="color: #CCC; shader: flat;"></a-entity>
         </a-entity>
     </a-entity>
 
-    <a-gltf-model src="#mercedes_g" scale="0.0265 0.0265 0.0265" position="3 0 -10" rotation="0 235 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_glk" scale="0.025 0.025 0.025" position="7 0 -6.8" rotation="0 330 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_sls" scale="0.0265 0.0265 0.0265" position="-6.5 0 -7" rotation="0 330 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_e" scale="0.03 0.03 0.03" position="1.7 0 0.5" rotation="0 295 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_c" scale="0.028 0.028 0.028" position="7 0 0.5" rotation="0 290 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_sls_amg" scale="0.033 0.033 0.033" position="-4.3 0 -0.6" rotation="0 220 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_amg_project_one" scale="0.013 0.013 0.013" position="-9 0 2.3" rotation="0 205 0" shadow></a-gltf-model>
-    <a-gltf-model src="#mercedes_slr" scale="0.002 0.002 0.002" position="-9.5 0 -9.3" rotation="0 235 0" shadow></a-gltf-model>
+    <a-box id="playArea" color="#cc9966" width="18" height="0.1" depth="14" position="-5 -0.05 -1.5"></a-box>
+    <a-box id="room" width="18" height="3.6" depth="14" position="-5 1.7 -1.5" material="side: double"></a-box>
 
-    <a-entity environment="preset: yavapai; shadow: true; playArea: 1.1; skyColor: #286978; groundYScale: 20"></a-entity>
-    <a-box id="road" material="src: #asphalt; repeat: 75 6" shadow width="75" height="0.1" depth="6" position="0 0.05 -3" shadow></a-box>
-    <a-box id="redBlock" material="visible: false" width="40" height="0.2" depth="30" position="0 0 0"></a-box>
+    <a-entity collada-model="#desk" position="-1 0 2.1" rotation="0 -90 0" scale="0.2 0.2 0.2"></a-entity>
+    <a-entity collada-model="#computer" position="-0.5 0.831 2.46" rotation="0 -90 0" scale="1.33 1.33 1.33"></a-entity>
+    <a-entity collada-model="#plant" position="-1 0 1.23" rotation="0 -90 0" scale="1.33 1.5 1.33"></a-entity>
+    <a-entity collada-model="#chair" position="-1.3 0 3.4" rotation="0 -90 0" scale="1.33 1.33 1.33"></a-entity>
+    <a-entity collada-model="#chair" position="2.246 0 2.345" rotation="0 83 0" scale="1.33 1.33 1.33"></a-entity>
+    <a-entity collada-model="#chair" position="1.246 0 1.886" rotation="0 100 0" scale="1.33 1.33 1.33"></a-entity>
+    <a-entity collada-model="#carpet" position="-2.777 0 -0.2" scale="3 1.666 2"></a-entity>
+    <a-image src="#logo" width="1111" height="693" scale="0.005 0.005 0.005" position="-3.5 1.889 5.499" rotation="0 180 0"></a-image>
+
+    <!--<a-gltf-model src="#mercedes_amg_project_one" scale="0.013 0.013 0.013" position="-8.675 0 1.67" rotation="0 110 0" shadow></a-gltf-model>-->
+    <a-gltf-model src="#mercedes_g" scale="0.0265 0.0265 0.0265" position="-9.974 0 -4.574" rotation="0 -30 0" shadow></a-gltf-model>
+    <a-gltf-model collada-model="#mercedes_slr_mclaren" position="-6 0 -2.5" rotation="0 220 0" shadow></a-gltf-model>
+
+    <a-light type="ambient" intensity="0.5"></a-light>
+    <a-light type="point" position="1.5 3.47 3" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="1.5 3.47 -1.25" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="1.5 3.47 -5.5" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="-5 3.47 3" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="-5 3.47 -1.25" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="-5 3.47 -5.5" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="-11.5 3.47 3" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="-11.5 3.47 -1.25" distance="15" decay="3" color="#ffffb2"></a-light>
+    <a-light type="point" position="-11.5 3.47 -5.5" distance="15" decay="3" color="#ffffb2"></a-light>
 </a-scene>
 </body>
 </html>
