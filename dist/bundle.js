@@ -99,9 +99,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var aframe_environment_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(52);
 /* harmony import */ var aframe_environment_component__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(aframe_environment_component__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _components_extended_teleport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(53);
+/* harmony import */ var _components_trackingdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(54);
 
 
 
+
+//import 'aframe-stats-in-vr-component';
 
 
 
@@ -90043,6 +90046,54 @@ var extendedTeleport = AFRAME.registerComponent('extended-teleport', {
         this.data.endEvents.forEach(function (endEvent) {
             el.emit(endEvent);
         });
+    }
+});
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trackingData", function() { return trackingData; });
+var trackingData = AFRAME.registerComponent('tracking-data', {
+    init: function () {
+        const sceneEl = this.el.sceneEl,
+              objects = sceneEl.querySelectorAll('[tracked]');
+
+        window.trackingData = {
+            objectsSeen : [],
+            objectsTime: {}
+        };
+
+        if (objects.length) {
+            for (var i=0; i<objects.length; i++) {
+                objects[i].addEventListener('mouseenter', this.onLookStart.bind(this));
+                window.trackingData.objectsTime[objects[i].getAttribute('tracked')] = 0;
+                objects[i].addEventListener('mouseleave', this.onLookEnd.bind(this));
+            }
+        }
+    },
+
+    remove: function () {
+        const sceneEl = this.el.sceneEl,
+              objects = sceneEl.querySelectorAll('[tracked]');
+
+        if (objects.length) {
+            for (var i=0; i<objects.length; i++) {
+                objects[i].removeEventListener('mouseenter', this.onLookStart);
+                objects[i].removeEventListener('mouseleave', this.onLookEnd.bind(this));
+            }
+        }
+    },
+
+    onLookStart: function (event) {
+        window.trackingData.objectsSeen.push(event.target.getAttribute('tracked'));
+        this.gazeStart = Date.now();
+    },
+
+    onLookEnd: function (event) {
+        window.trackingData.objectsTime[event.target.getAttribute('tracked')] += (Date.now() - this.gazeStart) / 1000;
     }
 });
 
