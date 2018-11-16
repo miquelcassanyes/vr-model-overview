@@ -98,13 +98,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var aframe_teleport_controls__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(aframe_teleport_controls__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var aframe_environment_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(52);
 /* harmony import */ var aframe_environment_component__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(aframe_environment_component__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var aframe_stats_in_vr_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(53);
-/* harmony import */ var aframe_stats_in_vr_component__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(aframe_stats_in_vr_component__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_extended_teleport__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(55);
+/* harmony import */ var _components_extended_teleport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(53);
+/* harmony import */ var _components_trackingdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(54);
 
 
 
 
+//import 'aframe-stats-in-vr-component';
 
 
 
@@ -89900,156 +89900,6 @@ PerlinNoise.prototype.noise = function(x, y, z) {
 
 /***/ }),
 /* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(54);
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports) {
-
-/* globals AFRAME */
-
-/**
- * Show scene stats in VR.
- */
-AFRAME.registerComponent('stats-in-vr', {
-  dependencies: ['stats'],
-
-  schema: {
-    enabled: {type:'boolean', default: true},
-    position: {type:'string', default: '0 -0.35 -0.5'},
-    scale: {type:'string', default: '0.5 0.5 1'},
-    updateIntervalMillis: {type:'number', default: 500}
-  },
-
-  init: function () {
-    var scene = this.el;
-    var statsEl = scene.components['stats'].statsEl;
-
-    // hide the DOM stats panel
-    statsEl.style = 'display: none !important;';
-    statsEl.className = 'a-hidden';
-
-    // once we start rendering, create VR stats panel
-    if (scene.renderStarted) { this.createStatsPanel(); } else {
-      scene.addEventListener('renderstart', this.createStatsPanel.bind(this));
-    }
-  },
-
-  createStatsPanel: function () {
-    var self = this;
-
-    // attached to scene element, so inject stats panel into camera
-    self.statspanel = document.createElement('a-entity');
-    self.statspanel.setAttribute('id', 'statspanel');
-    self.statspanel.setAttribute('position', self.data.position);
-    self.statspanel.setAttribute('scale', self.data.scale);
-    self.statspanel.setAttribute('visible', self.data.enabled ? 'true' : 'false');
-    self.el.camera.el.appendChild(self.statspanel);
-
-    // set up the VR stats panel
-    self.valuecanvases = [];
-    self.rsids = [];
-    self.rsvalues = [];
-  },
-
-  updateStatsPanel: function () {
-    var self = this;
-    if (!self.statspanel || !self.rsids) { return; }
-    var scene = this.el;
-    var statsEl = scene.components['stats'].statsEl;
-    var rscanvases = document.querySelectorAll('.rs-canvas');
-    for (var i = 0; i < rscanvases.length; i++) {
-      var rsparent = rscanvases[i].parentElement;
-      var rsid = rsparent.querySelector('.rs-counter-id').innerText;
-      if (self.rsids.indexOf(rsid) >= 0) { continue; }
-
-      // remember labels and value elements
-      self.rsids.push(rsid);
-      self.rsvalues.push(rsparent.querySelector('.rs-counter-value'));
-
-      // inject id values for rstats canvases
-      var idsuffix = self.rsids[i].replace(' ', '_');
-      rscanvases[i].id = 'rstats-' + idsuffix;
-
-      var y = (1.25 - i * 0.025) + ' 0';
-
-      // create the image for the rstats canvas
-      var stats = document.createElement('a-image');
-      stats.setAttribute('position', '-0.08 ' + y);
-      stats.setAttribute('width', '0.34');
-      stats.setAttribute('height', '0.025');
-      stats.setAttribute('src', '#' + rscanvases[i].id);
-      self.statspanel.appendChild(stats);
-
-      // create the canvas for the value
-      var valuecanvas = document.createElement('canvas');
-      valuecanvas.setAttribute('id', 'value-' + idsuffix);
-      valuecanvas.setAttribute('width', '160');
-      valuecanvas.setAttribute('height', '20');
-      valuecanvas.setAttribute('crossorigin', 'anonymous');
-      self.valuecanvases.push(valuecanvas);
-
-      // add the value canvas
-      statsEl.appendChild(self.valuecanvases[i]);
-
-      // create the image for the value canvas
-      var value = document.createElement('a-image');
-      value.setAttribute('position', '0.17 ' + y);
-      value.setAttribute('width', '0.16');
-      value.setAttribute('height', '0.025');
-      value.setAttribute('src', '#' + self.valuecanvases[i].id);
-      self.statspanel.appendChild(value);
-    }
-  },
-
-  update: function () {
-    if (!this.statspanel) { return; }
-    this.statspanel.setAttribute('position', this.data.position);
-    this.statspanel.setAttribute('scale', this.data.scale);
-    return (!this.data.enabled) ? this.hide() : this.show();
-  },
-
-  remove: function () {
-    var scene = this.el;
-    var statsEl = scene.components['stats'].statsEl;
-
-    statsEl.parentNode.removeChild(statsEl);
-  },
-
-  tick: function () {
-    // periodically update the value canvases
-    var now = Date.now();
-    if (now < this.lastTime + this.data.updateIntervalMillis) { return; }
-    this.lastTime = now;
-    this.updateStatsPanel();
-    if (this.valuecanvases) {
-      for (var i = 0; i < this.valuecanvases.length; i++) {
-        var ctx = this.valuecanvases[i].getContext('2d');
-        ctx.font = '16px monospace';
-        ctx.fillStyle = 'gray';
-        ctx.fillRect(0, 0, 160, 20);
-        ctx.fillStyle = 'black';
-        ctx.fillText(this.rsvalues[i].innerText + ' ' + this.rsids[i], 2, 16);
-      }
-    }
-  },
-
-  hide: function () {
-    if (this.statspanel) { this.statspanel.object3D.visible = false; }
-  },
-
-  show: function () {
-    if (this.statspanel) { this.statspanel.object3D.visible = true; }
-  }
-
-});
-
-
-/***/ }),
-/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -90196,6 +90046,54 @@ var extendedTeleport = AFRAME.registerComponent('extended-teleport', {
         this.data.endEvents.forEach(function (endEvent) {
             el.emit(endEvent);
         });
+    }
+});
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trackingData", function() { return trackingData; });
+var trackingData = AFRAME.registerComponent('tracking-data', {
+    init: function () {
+        const sceneEl = this.el.sceneEl,
+              objects = sceneEl.querySelectorAll('[tracked]');
+
+        window.trackingData = {
+            objectsSeen : [],
+            objectsTime: {}
+        };
+
+        if (objects.length) {
+            for (var i=0; i<objects.length; i++) {
+                objects[i].addEventListener('mouseenter', this.onLookStart.bind(this));
+                window.trackingData.objectsTime[objects[i].getAttribute('tracked')] = 0;
+                objects[i].addEventListener('mouseleave', this.onLookEnd.bind(this));
+            }
+        }
+    },
+
+    remove: function () {
+        const sceneEl = this.el.sceneEl,
+              objects = sceneEl.querySelectorAll('[tracked]');
+
+        if (objects.length) {
+            for (var i=0; i<objects.length; i++) {
+                objects[i].removeEventListener('mouseenter', this.onLookStart);
+                objects[i].removeEventListener('mouseleave', this.onLookEnd.bind(this));
+            }
+        }
+    },
+
+    onLookStart: function (event) {
+        window.trackingData.objectsSeen.push(event.target.getAttribute('tracked'));
+        this.gazeStart = Date.now();
+    },
+
+    onLookEnd: function (event) {
+        window.trackingData.objectsTime[event.target.getAttribute('tracked')] += (Date.now() - this.gazeStart) / 1000;
     }
 });
 
